@@ -1,0 +1,12 @@
+[package]
+name = "rust_egui_examples"
+version = "0.1.0"
+authors = ["MajorX234 <majorx234@googlemail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "first_app"
+path = "src/first_app/main.rs"
+
+[dependencies]
+eframe = { version = "0.18.0"}
