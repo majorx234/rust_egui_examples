@@ -8,5 +8,9 @@ edition = "2018"
 name = "first_app"
 path = "src/first_app/main.rs"
 
+[[bin]]
+name = "counter"
+path = "src/counter/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
