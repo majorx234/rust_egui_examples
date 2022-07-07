@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["MajorX234 <majorx234@googlemail.com>"]
 edition = "2018"
 
+[lib]
+name = "cli_lib"
+path = "src/lib.rs"
+
 [[bin]]
 name = "first_app"
 path = "src/first_app/main.rs"
@@ -12,5 +16,10 @@ path = "src/first_app/main.rs"
 name = "counter"
 path = "src/counter/main.rs"
 
+[[bin]]
+name = "plot"
+path = "src/plot/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
+scan_fmt = "0.2.6"
