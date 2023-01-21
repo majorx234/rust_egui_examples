@@ -20,6 +20,11 @@ path = "src/counter/main.rs"
 name = "plot"
 path = "src/plot/bin/main.rs"
 
+[[bin]]
+name = "painter"
+path = "src/painter/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
+emath = { version = "0.20.0"}
 scan_fmt = "0.2.6"
