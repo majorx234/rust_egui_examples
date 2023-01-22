@@ -2,8 +2,21 @@ use eframe::egui;
 use eframe::egui::plot::{Line, Plot, Value, Values};
 use eframe::egui::Context;
 use eframe::NativeOptions;
+use measurements::Measurements;
 
-struct App {}
+mod measurements;
+
+struct App {
+    measurements: Measurements,
+}
+
+impl App {
+    fn new() -> Self {
+        Self {
+            measurements: Measurements::new(),
+        }
+    }
+}
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
@@ -22,7 +35,7 @@ impl eframe::App for App {
 }
 
 fn main() {
-    let app = App {};
+    let app = App::new();
     let options = NativeOptions::default();
     eframe::run_native("plotting app", options, Box::new(|_cc| Box::new(app)));
 }
