@@ -21,6 +21,11 @@ name = "plot"
 path = "src/plot/bin/main.rs"
 
 [[bin]]
+name = "plot_lines"
+path = "src/plot_lines/bin/main.rs"
+
+
+[[bin]]
 name = "painter"
 path = "src/painter/bin/main.rs"
 
