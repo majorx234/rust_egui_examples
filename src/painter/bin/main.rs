@@ -1,7 +1,7 @@
 use cli_lib::read_data;
 use eframe::egui;
 use eframe::egui::plot::{Value, Values};
-use eframe::egui::{emath, Color32, Painter, Pos2, Rect, Sense, Stroke, Ui};
+use eframe::egui::{emath, Color32, Frame, Painter, Pos2, Rect, Sense, Stroke, Ui};
 
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(default))]
@@ -21,6 +21,14 @@ impl Default for Painting {
 }
 
 impl Painting {
+    pub fn ui(&mut self, ui: &mut Ui) {
+        self.ui_control(ui);
+        ui.label("Paint with your mouse/touch!");
+        Frame::canvas(ui.style()).show(ui, |ui| {
+            self.ui_content(ui);
+        });
+    }
+
     pub fn ui_control(&mut self, ui: &mut egui::Ui) -> egui::Response {
         ui.horizontal(|ui| {
             egui::stroke_ui(ui, &mut self.stroke, "Stroke");
@@ -89,11 +97,9 @@ impl eframe::App for PaintingApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Painter");
-            /* ui.horizontal(|ui| {
-                Painter::new("my_painter")
-                    .view_aspect(2.0)
-                    .show(ui, |painter_ui| painter_ui.show());
-            })*/
+            ui.vertical(|ui| {
+                Painting::default().ui(ui);
+            });
         });
     }
 }
