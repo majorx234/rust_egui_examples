@@ -29,6 +29,10 @@ path = "src/plot_lines/bin/main.rs"
 name = "painter"
 path = "src/painter/bin/main.rs"
 
+[[bin]]
+name = "toggle_switch"
+path = "src/toggle_switch/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
 emath = { version = "0.20.0"}
