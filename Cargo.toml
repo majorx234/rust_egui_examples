@@ -33,6 +33,10 @@ path = "src/painter/bin/main.rs"
 name = "toggle_switch"
 path = "src/toggle_switch/bin/main.rs"
 
+[[bin]]
+name = "image_buffer_test"
+path = "src/image_buffer_test/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
 emath = { version = "0.20.0"}
