@@ -39,5 +39,6 @@ path = "src/image_buffer_test/bin/main.rs"
 
 [dependencies]
 eframe = { version = "0.18.0"}
+epaint = { version = "0.21.0"}
 emath = { version = "0.20.0"}
 scan_fmt = "0.2.6"
