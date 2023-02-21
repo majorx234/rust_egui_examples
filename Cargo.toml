@@ -37,6 +37,10 @@ path = "src/toggle_switch/bin/main.rs"
 name = "image_buffer_test"
 path = "src/image_buffer_test/bin/main.rs"
 
+[[bin]]
+name = "dynamic_texture"
+path = "src/dynamic_texture/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.18.0"}
 epaint = { version = "0.21.0"}
