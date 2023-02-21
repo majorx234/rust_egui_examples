@@ -53,18 +53,18 @@ impl Gradient {
     pub fn endpoints(left: Color32, right: Color32) -> Self {
         Self(vec![left, right])
     }
-    /*
-        pub fn ground_truth_gradient(
-            left: Color32,
-            right: Color32,
-            interpolation: Interpolation,
-        ) -> Self {
-            match interpolation {
-                Interpolation::Linear => Self::ground_truth_linear_gradient(left, right),
-                Interpolation::Gamma => Self::ground_truth_gamma_gradient(left, right),
-            }
+
+    pub fn ground_truth_gradient(
+        left: Color32,
+        right: Color32,
+        interpolation: Interpolation,
+    ) -> Self {
+        match interpolation {
+            Interpolation::Linear => Self::ground_truth_linear_gradient(left, right),
+            Interpolation::Gamma => Self::ground_truth_gamma_gradient(left, right),
         }
-    */
+    }
+
     pub fn ground_truth_linear_gradient(left: Color32, right: Color32) -> Self {
         let left = Rgba::from(left);
         let right = Rgba::from(right);
@@ -80,7 +80,6 @@ impl Gradient {
         )
     }
 
-    /*
     pub fn ground_truth_gamma_gradient(left: Color32, right: Color32) -> Self {
         let n = 255;
         Self(
@@ -91,7 +90,7 @@ impl Gradient {
                 })
                 .collect(),
         )
-    }*/
+    }
 
     /// Do premultiplied alpha-aware blending of the gradient on top of the fill color
     /// in gamma-space.
@@ -115,6 +114,15 @@ impl Gradient {
     pub fn to_pixel_row(&self) -> Vec<Color32> {
         self.0.clone()
     }
+}
+
+fn lerp_color_gamma(left: Color32, right: Color32, t: f32) -> Color32 {
+    Color32::from_rgba_premultiplied(
+        lerp((left[0] as f32)..=(right[0] as f32), t).round() as u8,
+        lerp((left[1] as f32)..=(right[1] as f32), t).round() as u8,
+        lerp((left[2] as f32)..=(right[2] as f32), t).round() as u8,
+        lerp((left[3] as f32)..=(right[3] as f32), t).round() as u8,
+    )
 }
 
 #[derive(Default)]
