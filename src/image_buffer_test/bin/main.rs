@@ -26,7 +26,11 @@ impl App for MyApp {
             } else {
                 let tex_color_start = Color32::from_rgb(64, 128, 255);
                 let tex_color_end = Color32::from_rgb(255, 64, 255);
-                let g = Gradient::endpoints(tex_color_start, tex_color_end);
+                let g = Gradient::ground_truth_gradient(
+                    tex_color_start,
+                    tex_color_end,
+                    Interpolation::Linear,
+                );
 
                 self.texture_id = Some((
                     egui::Vec2::new(400.0, 300.0),
