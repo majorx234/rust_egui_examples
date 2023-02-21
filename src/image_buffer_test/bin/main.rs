@@ -24,8 +24,9 @@ impl App for MyApp {
                 ui.heading("This is an image:");
                 ui.add(egui::Image::new(texture_id, size));
             } else {
-                let tex_color = Color32::from_rgb(64, 128, 255);
-                let g = Gradient::one_color(tex_color);
+                let tex_color_start = Color32::from_rgb(64, 128, 255);
+                let tex_color_end = Color32::from_rgb(255, 64, 255);
+                let g = Gradient::endpoints(tex_color_start, tex_color_end);
 
                 self.texture_id = Some((
                     egui::Vec2::new(400.0, 300.0),
