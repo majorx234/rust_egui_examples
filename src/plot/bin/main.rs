@@ -1,5 +1,5 @@
 use eframe::egui;
-use eframe::egui::plot::{Line, Plot, Value, Values};
+use egui_plot::{Line, Plot};
 
 use cli_lib::read_data;
 
@@ -19,12 +19,14 @@ impl Default for PlotApp {
 
 impl eframe::App for PlotApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let wave = (0..self.size).map(|i| {
-            let x = i as f64;
-            Value::new(x, self.wave_data[i] as f64)
-        });
+        let wave = (0..self.size)
+            .map(|i| {
+                let x = i as f64;
+                [x, self.wave_data[i] as f64]
+            })
+            .collect::<Vec<[f64; 2]>>();
 
-        let wave_line = Line::new(Values::from_values_iter(wave));
+        let wave_line = Line::new(wave);
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Plot");

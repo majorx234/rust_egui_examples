@@ -1,5 +1,6 @@
 use eframe::egui::{lerp, Color32, Rgba, TextureHandle};
 use eframe::{egui, App};
+use epaint::textures::TextureOptions;
 use std::collections::HashMap;
 use std::convert::TryInto;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -23,7 +24,7 @@ impl App for DynamicTextureApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             if let Some((size, texture_id)) = self.texture_id {
                 ui.heading("This is an image:");
-                ui.add(egui::Image::new(texture_id, size));
+                ui.add(egui::Image::new((texture_id, size)));
             }
             let time_unix = SystemTime::now()
                 .duration_since(UNIX_EPOCH)
@@ -152,6 +153,7 @@ impl TextureManager {
                     size: [width, height],
                     pixels,
                 },
+                TextureOptions::LINEAR,
             )
         })
     }

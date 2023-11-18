@@ -1,5 +1,6 @@
 use eframe::egui::{lerp, Color32, Rgba, TextureHandle};
 use eframe::{egui, App};
+use epaint::textures::TextureOptions;
 use std::collections::HashMap;
 use std::convert::TryInto;
 
@@ -22,7 +23,7 @@ impl App for MyApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             if let Some((size, texture_id)) = self.texture_id {
                 ui.heading("This is an image:");
-                ui.add(egui::Image::new(texture_id, size));
+                ui.add(egui::Image::new((texture_id, size)));
             } else {
                 let tex_color_start = Color32::from_rgb(64, 128, 255);
                 let tex_color_end = Color32::from_rgb(255, 64, 255);
@@ -145,6 +146,7 @@ impl TextureManager {
                     size: [width, height],
                     pixels,
                 },
+                TextureOptions::LINEAR,
             )
         })
     }

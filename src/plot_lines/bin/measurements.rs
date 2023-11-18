@@ -1,4 +1,3 @@
-use eframe::egui::plot::Value;
 use std::collections::VecDeque;
 
 pub struct Measurements {

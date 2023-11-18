@@ -1,6 +1,5 @@
 use cli_lib::read_data;
 use eframe::egui;
-use eframe::egui::plot::{Value, Values};
 use eframe::egui::{emath, Color32, Frame, Painter, Pos2, Rect, Sense, Stroke, Ui};
 
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
@@ -67,7 +66,7 @@ impl Painting {
             response.mark_changed();
         }
 
-        let shapes = self
+        let shapes: Vec<_> = self
             .lines
             .iter()
             .filter(|line| line.len() >= 2)

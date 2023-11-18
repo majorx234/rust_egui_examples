@@ -2,7 +2,7 @@
 name = "rust_egui_examples"
 version = "0.1.0"
 authors = ["MajorX234 <majorx234@googlemail.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "cli_lib"
@@ -42,7 +42,8 @@ name = "dynamic_texture"
 path = "src/dynamic_texture/bin/main.rs"
 
 [dependencies]
-eframe = { version = "0.18.0"}
-epaint = { version = "0.21.0"}
-emath = { version = "0.20.0"}
+eframe = { version = "0.23.0"}
+epaint = { version = "0.23.0"}
+emath = { version = "0.23.0"}
+egui_plot = { version = "0.23.0"}
 scan_fmt = "0.2.6"
