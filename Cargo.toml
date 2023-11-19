@@ -41,6 +41,10 @@ path = "src/image_buffer_test/bin/main.rs"
 name = "dynamic_texture"
 path = "src/dynamic_texture/bin/main.rs"
 
+[[bin]]
+name = "drag_and_drop_assign"
+path = "src/drag_and_drop_assign/bin/main.rs"
+
 [dependencies]
 eframe = { version = "0.23.0"}
 epaint = { version = "0.23.0"}
