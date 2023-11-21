@@ -1,5 +1,5 @@
 use eframe::egui::{
-    self, vec2, CursorIcon, Id, InnerResponse, LayerId, Order, Rect, Sense, Shape, Ui, Vec2,
+    self, vec2, CursorIcon, Id, InnerResponse, Label, LayerId, Order, Rect, Sense, Shape, Ui, Vec2,
 };
 
 pub fn drag_source(ui: &mut Ui, id: Id, body: impl FnOnce(&mut Ui)) {
@@ -105,28 +105,55 @@ impl eframe::App for DragAndDropAssignApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("DragAndDropAssignApp");
-            ui.columns(3, |columns| {
-                columns[0].set_min_size(vec2(64.0, 100.0));
-                columns[1].set_min_size(vec2(64.0, 100.0));
-                columns[2].set_min_size(vec2(64.0, 100.0));
-                columns[0].label("base_elements");
-                if columns[0].button("add").clicked() {
+            let mut source_col_row = None;
+            let mut drop_col = None;
+            ui.columns(3, |uis| {
+                uis[0].set_min_size(vec2(64.0, 100.0));
+                uis[1].set_min_size(vec2(64.0, 100.0));
+                uis[2].set_min_size(vec2(64.0, 100.0));
+                uis[0].label("base_elements");
+                if uis[0].button("add").clicked() {
                     self.add_base_element("test1".to_string());
                 }
-                columns[1].label("assigned_elements");
-                columns[2].label("not_assigned_elements");
-
+                uis[1].label("assigned_elements");
+                uis[2].label("not_assigned_elements");
+                if uis[2].button("add").clicked() {
+                    self.add_not_assigned_elements("assign test1".to_string());
+                }
                 let can_accept_what_is_being_dragged = true;
-                let response =
-                    drop_target(&mut columns[1], can_accept_what_is_being_dragged, |ui| {
-                        let col_idx = 2;
-                        for (row_idx, item) in self.assigned_elements_to_base[self.selected_elem]
-                            .iter()
-                            .enumerate()
-                        {
-                            let item_id = Id::new("Test Item").with(col_idx).with(row_idx);
+                let col_idx = 2;
+                let response = drop_target(&mut uis[1], can_accept_what_is_being_dragged, |ui| {
+                    for (row_idx, item) in self.assigned_elements_to_base[self.selected_elem]
+                        .iter()
+                        .enumerate()
+                    {
+                        let item_id = Id::new("Test Item").with(col_idx).with(row_idx);
+                        drag_source(ui, item_id, |ui| {
+                            let response = ui.add(Label::new(item).sense(Sense::click()));
+                            response.context_menu(|ui| {
+                                if ui.button("Remove").clicked() {
+                                    self.not_assigned_elements.remove(row_idx);
+                                    ui.close_menu();
+                                }
+                            });
+                        });
+                        if ui.memory(|mem| mem.is_being_dragged(item_id)) {
+                            source_col_row = Some((col_idx, row_idx));
                         }
-                    });
+                    }
+                })
+                .response;
+                let response = response.context_menu(|ui| {
+                    if ui.button("New Item").clicked() {
+                        self.not_assigned_elements.push("New Item".to_owned());
+                        ui.close_menu();
+                    }
+                });
+
+                let is_being_dragged = uis[2].memory(|mem| mem.is_anything_being_dragged());
+                if is_being_dragged && can_accept_what_is_being_dragged && response.hovered() {
+                    drop_col = Some(col_idx);
+                }
             })
         });
     }
