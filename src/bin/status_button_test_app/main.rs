@@ -1,6 +1,7 @@
 use eframe::egui;
 pub mod status_button_test_app;
 use crate::status_button_test_app::StatusButtonTestApp;
+mod status_button;
 
 fn main() {
     let options = eframe::NativeOptions::default();

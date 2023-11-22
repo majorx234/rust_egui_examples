@@ -47,7 +47,7 @@ path = "src/drag_and_drop_assign/bin/main.rs"
 
 [[bin]]
 name = "status_button_test_app"
-path = "src/status_button/bin/main.rs"
+path = "src/bin/status_button_test_app/main.rs"
 
 [dependencies]
 eframe = { version = "0.23.0"}
