@@ -1,3 +1,4 @@
+use crossbeam_channel::unbounded;
 use eframe::{egui, epaint::Vec2};
 
 // Source code example of how to create your own widget.

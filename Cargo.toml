@@ -55,3 +55,4 @@ epaint = { version = "0.23.0"}
 emath = { version = "0.23.0"}
 egui_plot = { version = "0.23.0"}
 scan_fmt = "0.2.6"
+crossbeam-channel = "0.5.8"
