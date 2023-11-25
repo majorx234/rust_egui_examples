@@ -4,14 +4,14 @@ use eframe::egui;
 
 pub struct StatusButtonTestApp {
     pub status: bool,
-    pub status_receiver: Option<std::sync::mpsc::Receiver<bool>>,
+    pub status_receiver: Option<crossbeam_channel::Receiver<bool>>,
     pub sender_thread: Option<std::thread::JoinHandle<()>>,
 }
 
 impl StatusButtonTestApp {
     pub fn new(
         status: bool,
-        status_receiver: Option<std::sync::mpsc::Receiver<bool>>,
+        status_receiver: Option<crossbeam_channel::Receiver<bool>>,
         sender_thread: Option<std::thread::JoinHandle<()>>,
     ) -> Self {
         StatusButtonTestApp {

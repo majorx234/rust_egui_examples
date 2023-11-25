@@ -9,9 +9,9 @@ fn main() {
     let options = eframe::NativeOptions::default();
 
     let (status_sender, status_receiver): (
-        std::sync::mpsc::SyncSender<bool>,
-        std::sync::mpsc::Receiver<bool>,
-    ) = mpsc::sync_channel(64);
+        crossbeam_channel::Sender<bool>,
+        crossbeam_channel::Receiver<bool>,
+    ) = unbounded();
 
     let sender_thread = std::thread::spawn(move || {
         while true {
