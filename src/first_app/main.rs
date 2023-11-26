@@ -4,7 +4,6 @@ struct MyApp {
     app_name: String,
 }
 
-
 impl Default for MyApp {
     fn default() -> Self {
         Self {
@@ -25,14 +24,11 @@ impl eframe::App for MyApp {
     }
 }
 
-
-
 fn main() {
     let options = eframe::NativeOptions::default();
-    eframe::run_native(
+    let _ = eframe::run_native(
         "first App",
         options,
         Box::new(|_cc| Box::new(MyApp::default())),
     );
 }
-

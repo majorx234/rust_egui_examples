@@ -1,7 +1,7 @@
 use crate::status_button::button;
-use crossbeam_channel::unbounded;
+use crossbeam_channel;
 use eframe::egui;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 pub struct StatusButtonTestApp {
     pub status: bool,

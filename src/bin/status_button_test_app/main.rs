@@ -2,7 +2,6 @@ pub mod status_button_test_app;
 use crate::status_button_test_app::StatusButtonTestApp;
 mod status_button;
 use crossbeam_channel::unbounded;
-use std::sync::mpsc;
 use std::{process::exit, thread, time::Duration};
 
 fn main() {
@@ -16,10 +15,11 @@ fn main() {
     let sender_thread = std::thread::spawn(move || {
         while true {
             thread::sleep(Duration::from_millis(2000));
-            status_sender.try_send(true);
+            let _ = status_sender.try_send(true);
             thread::sleep(Duration::from_millis(500));
-            status_sender.try_send(false);
+            let _ = status_sender.try_send(false);
         }
+        exit(0);
     });
 
     let status = false;

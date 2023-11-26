@@ -1,4 +1,3 @@
-use crossbeam_channel::unbounded;
 use eframe::{egui, epaint::Vec2};
 
 // Source code example of how to create your own widget.
@@ -134,5 +133,5 @@ fn main() {
     let toggle_app = ToggleApp::default();
     let mut options = eframe::NativeOptions::default();
     options.initial_window_size = Some(Vec2::new(80.0, 60.0));
-    eframe::run_native("Toggle App", options, Box::new(|_cc| Box::new(toggle_app)));
+    let _ = eframe::run_native("Toggle App", options, Box::new(|_cc| Box::new(toggle_app)));
 }

@@ -50,5 +50,5 @@ fn main() {
         size: values_size,
     };
     let options = eframe::NativeOptions::default();
-    eframe::run_native("Plot App", options, Box::new(|_cc| Box::new(plot_app)));
+    let _ = eframe::run_native("Plot App", options, Box::new(|_cc| Box::new(plot_app)));
 }

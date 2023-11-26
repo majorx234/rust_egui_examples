@@ -162,7 +162,7 @@ impl TextureManager {
 fn main() {
     let dynamic_texture_app = DynamicTextureApp::default();
     let options = eframe::NativeOptions::default();
-    eframe::run_native(
+    let _ = eframe::run_native(
         "Dynamic Texture",
         options,
         Box::new(|_cc| Box::new(dynamic_texture_app)),

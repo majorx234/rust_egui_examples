@@ -6,9 +6,7 @@ struct CounterApp {
 
 impl Default for CounterApp {
     fn default() -> Self {
-        Self {
-            counter: 0,
-        }
+        Self { counter: 0 }
     }
 }
 
@@ -22,9 +20,9 @@ impl eframe::App for CounterApp {
                 }
                 if ui.button("down").clicked() {
                     if self.counter > 0 {
-                        self.counter -= 1;    
-                    }                    
-                }    
+                        self.counter -= 1;
+                    }
+                }
                 ui.label(format!("value: {}", self.counter));
             })
         });
@@ -33,7 +31,7 @@ impl eframe::App for CounterApp {
 
 fn main() {
     let options = eframe::NativeOptions::default();
-    eframe::run_native(
+    let _ = eframe::run_native(
         "Counter App",
         options,
         Box::new(|_cc| Box::new(CounterApp::default())),

@@ -155,7 +155,7 @@ impl TextureManager {
 fn main() {
     let my_app = MyApp::default();
     let options = eframe::NativeOptions::default();
-    eframe::run_native(
+    let _ = eframe::run_native(
         "Image buffer Test App",
         options,
         Box::new(|_cc| Box::new(my_app)),

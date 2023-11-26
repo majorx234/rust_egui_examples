@@ -106,7 +106,7 @@ impl eframe::App for PaintingApp {
 fn main() {
     let painting_app = PaintingApp { size: 0 };
     let options = eframe::NativeOptions::default();
-    eframe::run_native(
+    let _ = eframe::run_native(
         "Painting App",
         options,
         Box::new(|_cc| Box::new(painting_app)),

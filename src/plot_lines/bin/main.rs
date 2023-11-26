@@ -1,5 +1,4 @@
 use eframe::egui;
-use eframe::egui::Context;
 use eframe::NativeOptions;
 use egui_plot::{Line, Plot};
 use measurements::Measurements;
@@ -31,5 +30,5 @@ impl eframe::App for App {
 fn main() {
     let app = App::new();
     let options = NativeOptions::default();
-    eframe::run_native("plotting app", options, Box::new(|_cc| Box::new(app)));
+    let _ = eframe::run_native("plotting app", options, Box::new(|_cc| Box::new(app)));
 }
