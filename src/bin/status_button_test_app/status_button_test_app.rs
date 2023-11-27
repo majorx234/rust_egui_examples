@@ -1,4 +1,4 @@
-use crate::status_button::button;
+use crate::status_button::status_button;
 use crossbeam_channel::unbounded;
 use eframe::egui;
 use std::thread;
@@ -59,7 +59,7 @@ impl eframe::App for StatusButtonTestApp {
         }
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("StatusButtonTestApp");
-            ui.add(button(&mut self.status));
+            ui.add(status_button(&mut self.status));
         });
     }
 }

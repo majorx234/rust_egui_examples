@@ -23,7 +23,7 @@ fn main() {
     });
 
     let _ = eframe::run_native(
-        "drag_and_drop_assign",
+        "status_button_test_app",
         options,
         Box::new(|cc| {
             Box::new(StatusButtonTestApp::new(

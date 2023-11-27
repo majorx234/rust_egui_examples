@@ -1,6 +1,6 @@
 use eframe::egui;
 
-fn button_ui(ui: &mut egui::Ui, status: &mut bool) -> egui::Response {
+fn status_button_ui(ui: &mut egui::Ui, status: &mut bool) -> egui::Response {
     let desired_size = ui.spacing().interact_size.y * egui::vec2(2.0, 1.0);
     let (rect, mut response) = ui.allocate_exact_size(desired_size, egui::Sense::click());
     if response.clicked() {
@@ -24,6 +24,6 @@ fn button_ui(ui: &mut egui::Ui, status: &mut bool) -> egui::Response {
     response
 }
 
-pub fn button(status: &mut bool) -> impl egui::Widget + '_ {
-    move |ui: &mut egui::Ui| button_ui(ui, status)
+pub fn status_button(status: &mut bool) -> impl egui::Widget + '_ {
+    move |ui: &mut egui::Ui| status_button_ui(ui, status)
 }
