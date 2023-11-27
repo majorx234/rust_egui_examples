@@ -1,6 +1,7 @@
 use crate::status_button::button;
-use crossbeam_channel;
+use crossbeam_channel::unbounded;
 use eframe::egui;
+use std::thread;
 use std::time::Instant;
 
 pub struct StatusButtonTestApp {
@@ -9,20 +10,29 @@ pub struct StatusButtonTestApp {
     pub sender_thread: Option<std::thread::JoinHandle<()>>,
     init_repainter: bool,
     timer: Instant,
+    repainter_thread_handle: Option<std::thread::JoinHandle<()>>,
 }
 
 impl StatusButtonTestApp {
     pub fn new(
+        cc: &eframe::CreationContext<'_>,
         status: bool,
-        status_receiver: Option<crossbeam_channel::Receiver<bool>>,
+        mim_status_receiver: Option<crossbeam_channel::Receiver<bool>>,
         sender_thread: Option<std::thread::JoinHandle<()>>,
     ) -> Self {
+        let (mim_status_sender, status_receiver) = unbounded();
+        let ctx = cc.egui_ctx.clone();
+
+        let repainter_thread_handle =
+            thread::spawn(|| repainter(ctx, mim_status_receiver, Some(mim_status_sender)));
+
         StatusButtonTestApp {
             status,
-            status_receiver,
+            status_receiver: Some(status_receiver),
             sender_thread,
             init_repainter: false,
             timer: Instant::now(),
+            repainter_thread_handle: Some(repainter_thread_handle),
         }
     }
 }
@@ -35,16 +45,13 @@ impl Default for StatusButtonTestApp {
             sender_thread: None,
             init_repainter: false,
             timer: Instant::now(),
+            repainter_thread_handle: None,
         }
     }
 }
 
 impl eframe::App for StatusButtonTestApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        if !self.init_repainter {
-            //thread::spawn(|| repainter(ctx));
-            self.init_repainter = true;
-        }
         let mut repaint = false;
         if let Some(ref status_receiver) = self.status_receiver {
             if let Ok(status) = status_receiver.try_recv() {
@@ -70,17 +77,19 @@ impl eframe::App for StatusButtonTestApp {
     }
 }
 
-/*
 fn repainter(
     ctx: egui::Context,
+    status_receiver: Option<crossbeam_channel::Receiver<bool>>,
+    status_sender: Option<crossbeam_channel::Sender<bool>>,
 ) {
-        loop {
-            if let Ok(trigger_note_msg) = rx_note_velocity.recv() {
-                if let Some(ref tx_note_velocity) = tx_note_velocity {
-                    tx_note_velocity.send(trigger_note_msg);
+    loop {
+        if let Some(ref status_receiver) = status_receiver {
+            if let Ok(trigger_msg) = status_receiver.recv() {
+                if let Some(ref status_sender) = status_sender {
+                    status_sender.send(trigger_msg);
+                    ctx.request_repaint();
                 }
             }
-            ctx.request_repaint();
         }
     }
-}*/
+}

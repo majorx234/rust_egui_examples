@@ -22,14 +22,16 @@ fn main() {
         exit(0);
     });
 
-    let status = false;
-
-    let status_button_test_app =
-        StatusButtonTestApp::new(status, Some(status_receiver), Some(sender_thread));
-
     let _ = eframe::run_native(
         "drag_and_drop_assign",
         options,
-        Box::new(|_cc| Box::new(status_button_test_app)),
+        Box::new(|cc| {
+            Box::new(StatusButtonTestApp::new(
+                cc,
+                false,
+                Some(status_receiver),
+                Some(sender_thread),
+            ))
+        }),
     );
 }
