@@ -8,7 +8,6 @@ pub struct StatusButtonTestApp {
     pub status: bool,
     pub status_receiver: Option<crossbeam_channel::Receiver<bool>>,
     pub sender_thread: Option<std::thread::JoinHandle<()>>,
-    init_repainter: bool,
     timer: Instant,
     repainter_thread_handle: Option<std::thread::JoinHandle<()>>,
 }
@@ -30,7 +29,6 @@ impl StatusButtonTestApp {
             status,
             status_receiver: Some(status_receiver),
             sender_thread,
-            init_repainter: false,
             timer: Instant::now(),
             repainter_thread_handle: Some(repainter_thread_handle),
         }
@@ -43,7 +41,6 @@ impl Default for StatusButtonTestApp {
             status: false,
             status_receiver: None,
             sender_thread: None,
-            init_repainter: false,
             timer: Instant::now(),
             repainter_thread_handle: None,
         }
@@ -52,27 +49,17 @@ impl Default for StatusButtonTestApp {
 
 impl eframe::App for StatusButtonTestApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let mut repaint = false;
         if let Some(ref status_receiver) = self.status_receiver {
             if let Ok(status) = status_receiver.try_recv() {
                 if status != self.status {
                     self.status = status;
-                    repaint = true;
                     self.timer = Instant::now();
-                    println!("changed");
                 }
             }
-        }
-        if self.timer.elapsed().as_millis() < 50 {
-            repaint = true;
         }
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("StatusButtonTestApp");
             ui.add(button(&mut self.status));
-            if repaint {
-                ui.ctx().request_repaint();
-                println!("repaint");
-            }
         });
     }
 }
@@ -86,7 +73,7 @@ fn repainter(
         if let Some(ref status_receiver) = status_receiver {
             if let Ok(trigger_msg) = status_receiver.recv() {
                 if let Some(ref status_sender) = status_sender {
-                    status_sender.send(trigger_msg);
+                    let _ = status_sender.send(trigger_msg);
                     ctx.request_repaint();
                 }
             }
