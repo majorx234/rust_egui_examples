@@ -12,14 +12,27 @@ fn main() {
         crossbeam_channel::Receiver<bool>,
     ) = unbounded();
 
-    let sender_thread = std::thread::spawn(move || {
+    let (value_sender, value_receiver): (
+        crossbeam_channel::Sender<u32>,
+        crossbeam_channel::Receiver<u32>,
+    ) = unbounded();
+
+    let status_sender_thread = std::thread::spawn(move || {
         while true {
             thread::sleep(Duration::from_millis(2000));
             let _ = status_sender.try_send(true);
             thread::sleep(Duration::from_millis(500));
             let _ = status_sender.try_send(false);
         }
-        exit(0);
+    });
+
+    let value_sender_thread = std::thread::spawn(move || {
+        let mut value: u32 = 0;
+        while true {
+            value = (value + 1) % 128;
+            let _ = value_sender.try_send(value);
+            thread::sleep(Duration::from_millis(100));
+        }
     });
 
     let _ = eframe::run_native(
@@ -31,7 +44,7 @@ fn main() {
                 false,
                 0,
                 Some(status_receiver),
-                Some(sender_thread),
+                Some(status_sender_thread),
             ))
         }),
     );
