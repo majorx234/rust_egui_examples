@@ -44,7 +44,9 @@ fn main() {
                 false,
                 0,
                 Some(status_receiver),
+                Some(value_receiver),
                 Some(status_sender_thread),
+                Some(value_sender_thread),
             ))
         }),
     );

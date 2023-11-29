@@ -8,9 +8,12 @@ pub struct ElementsTestApp {
     pub status: bool,
     pub value: u32,
     pub status_receiver: Option<crossbeam_channel::Receiver<bool>>,
-    pub sender_thread: Option<std::thread::JoinHandle<()>>,
+    pub value_receiver: Option<crossbeam_channel::Receiver<u32>>,
+    pub status_sender_thread: Option<std::thread::JoinHandle<()>>,
+    pub value_sender_thread: Option<std::thread::JoinHandle<()>>,
     timer: Instant,
-    repainter_thread_handle: Option<std::thread::JoinHandle<()>>,
+    repainter1_thread_handle: Option<std::thread::JoinHandle<()>>,
+    repainter2_thread_handle: Option<std::thread::JoinHandle<()>>,
 }
 
 impl ElementsTestApp {
@@ -19,21 +22,32 @@ impl ElementsTestApp {
         status: bool,
         value: u32,
         mim_status_receiver: Option<crossbeam_channel::Receiver<bool>>,
-        sender_thread: Option<std::thread::JoinHandle<()>>,
+        mim_value_receiver: Option<crossbeam_channel::Receiver<u32>>,
+        status_sender_thread: Option<std::thread::JoinHandle<()>>,
+        value_sender_thread: Option<std::thread::JoinHandle<()>>,
     ) -> Self {
         let (mim_status_sender, status_receiver) = unbounded();
-        let ctx = cc.egui_ctx.clone();
+        let (mim_value_sender, value_receiver) = unbounded();
 
-        let repainter_thread_handle =
-            thread::spawn(|| repainter(ctx, mim_status_receiver, Some(mim_status_sender)));
+        let ctx1 = cc.egui_ctx.clone();
+        let ctx2 = cc.egui_ctx.clone();
+
+        let repainter1_thread_handle =
+            thread::spawn(|| repainter::<bool>(ctx1, mim_status_receiver, Some(mim_status_sender)));
+
+        let repainter2_thread_handle =
+            thread::spawn(|| repainter::<u32>(ctx2, mim_value_receiver, Some(mim_value_sender)));
 
         ElementsTestApp {
             status,
             value: 0,
             status_receiver: Some(status_receiver),
-            sender_thread,
+            value_receiver: Some(value_receiver),
+            status_sender_thread,
+            value_sender_thread,
             timer: Instant::now(),
-            repainter_thread_handle: Some(repainter_thread_handle),
+            repainter1_thread_handle: Some(repainter1_thread_handle),
+            repainter2_thread_handle: Some(repainter2_thread_handle),
         }
     }
 }
@@ -44,9 +58,12 @@ impl Default for ElementsTestApp {
             status: false,
             value: 0,
             status_receiver: None,
-            sender_thread: None,
+            value_receiver: None,
+            status_sender_thread: None,
+            value_sender_thread: None,
             timer: Instant::now(),
-            repainter_thread_handle: None,
+            repainter1_thread_handle: None,
+            repainter2_thread_handle: None,
         }
     }
 }
@@ -68,16 +85,16 @@ impl eframe::App for ElementsTestApp {
     }
 }
 
-fn repainter(
+fn repainter<T>(
     ctx: egui::Context,
-    status_receiver: Option<crossbeam_channel::Receiver<bool>>,
-    status_sender: Option<crossbeam_channel::Sender<bool>>,
+    receiver: Option<crossbeam_channel::Receiver<T>>,
+    sender: Option<crossbeam_channel::Sender<T>>,
 ) {
     loop {
-        if let Some(ref status_receiver) = status_receiver {
-            if let Ok(trigger_msg) = status_receiver.recv() {
-                if let Some(ref status_sender) = status_sender {
-                    let _ = status_sender.send(trigger_msg);
+        if let Some(ref receiver) = receiver {
+            if let Ok(trigger_msg) = receiver.recv() {
+                if let Some(ref sender) = sender {
+                    let _ = sender.send(trigger_msg);
                     ctx.request_repaint();
                 }
             }
