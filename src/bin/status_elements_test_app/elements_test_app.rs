@@ -78,9 +78,15 @@ impl eframe::App for ElementsTestApp {
                 }
             }
         }
+        if let Some(ref value_receiver) = self.value_receiver {
+            if let Ok(value) = value_receiver.try_recv() {
+                self.value = value;
+            }
+        }
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("StatusElementsTestApp");
             ui.add(status_indicator(&self.status));
+            ui.add(value_indicator(self.value));
         });
     }
 }
