@@ -11,15 +11,19 @@ fn status_indicator_ui(ui: &mut egui::Ui, status: &bool) -> egui::Response {
     let (rect, response) = ui.allocate_exact_size(desired_size, egui::Sense::hover());
     //TODO implement painter
     if ui.is_rect_visible(response.rect) {
+        let mut how_on = ui.ctx().animate_bool(response.id, *status);
+        if *status {
+            how_on = 1.0;
+        }
         let visuals = ui.style().visuals.clone();
         let rounding = rect.height() / 2.0;
         ui.painter()
             .rect(rect, rounding, visuals.extreme_bg_color, Stroke::NONE);
         let inner_rect =
-            egui::Rect::from_min_size(rect.min, egui::vec2(rect.width(), rect.height()));
+            egui::Rect::from_min_size(rect.min, egui::vec2(rect.width() * how_on, rect.height()));
         let (dark, bright) = (0.7, 1.0);
-        if *status {
-            let color_factor = bright;
+        if how_on > 0.0 {
+            let color_factor = bright * how_on;
             ui.painter().rect(
                 inner_rect,
                 rounding,
