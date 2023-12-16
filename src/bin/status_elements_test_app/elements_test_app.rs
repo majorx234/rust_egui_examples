@@ -1,4 +1,4 @@
-use crate::elements::{status_indicator, value_indicator};
+use crate::elements::{status_indicator, two_value_indicator, value_indicator};
 use crossbeam_channel::unbounded;
 use eframe::egui;
 use std::thread;
@@ -87,6 +87,7 @@ impl eframe::App for ElementsTestApp {
             ui.heading("StatusElementsTestApp");
             ui.add(status_indicator(&self.status));
             ui.add(value_indicator(self.value));
+            ui.add(two_value_indicator(64, 65));
         });
     }
 }
